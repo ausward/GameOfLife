@@ -6,9 +6,9 @@ import time
 from life import GameOfLifeGrid
 
 # --- Constants ---
-SCREEN_WIDTH = 1900
+SCREEN_WIDTH = 900
 SCREEN_HEIGHT = 900
-CELL_SIZE = 8 # Matches your Go code's cellSize
+CELL_SIZE = 10 # Matches your Go code's cellSize
 
 # --- Colors ---
 BLACK = (0, 0, 0)
@@ -17,6 +17,9 @@ WHITE = (255, 255, 255)
 class Game:
     def __init__(self):
         pygame.init() # Initialize all the Pygame modules
+
+        icon = pygame.image.load("icon.png") # Load an icon image
+        pygame.display.set_icon(icon) # Set the window icon
 
         # Get actual monitor resolution (optional, but good for fullscreen)
         infoObject = pygame.display.Info()
@@ -34,7 +37,7 @@ class Game:
         grid_height = self.screen_height // CELL_SIZE
         self.life_grid = GameOfLifeGrid(grid_width, grid_height)
 
-        self.tps = 10 # Ticks Per Second (simulation speed)
+        self.tps = 100 # Ticks Per Second (simulation speed)
         self.last_update_time = time.time() # For managing simulation speed
         self.last_pattern_change_time = time.time() # For managing pattern changes
 
@@ -64,16 +67,16 @@ class Game:
 
             # --- Game Logic Update (based on TPS) ---
             current_time = time.time()
-            if current_time - self.last_update_time >= 1.0 / self.tps:
-                self.life_grid.do_an_iteration()
-                self.last_update_time = current_time
+            # if current_time - self.last_update_time >= 1.0 / self.tps:
+            self.life_grid.do_an_iteration()
+            self.last_update_time = current_time
 
-                # Color change logic (from your Go code)
-                self.b = (self.b - 2) % 256 # Ensure it wraps around 0-255
-                self.g = (self.g + 3) % 256 # Ensure it wraps around 0-255
+            # Color change logic (from your Go code)
+            self.b = (self.b - 2) % 256 # Ensure it wraps around 0-255
+            self.g = (self.g + 3) % 256 # Ensure it wraps around 0-255
 
             # --- Pattern Change Logic (from your Go code) ---
-            if current_time - self.last_pattern_change_time >= 10 * 60: # 10 minutes
+            if current_time - self.last_pattern_change_time >= 2 * 60: # 10 minutes
                 self.last_pattern_change_time = current_time
                 temp_index = self.start_index
                 if temp_index >= len(self.life_grid.starts): # Check bounds
